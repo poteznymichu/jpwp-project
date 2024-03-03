@@ -13,10 +13,10 @@ class Player:
 
     def movement(self, keys, windowWidth):
 
-        if keys[pygame.K_a] or keys[pygame.K_LEFT] and self.x > self.vel:
+        if (keys[pygame.K_a] or keys[pygame.K_LEFT]) and self.x > self.vel:
             self.x -= self.vel
 
-        if keys[pygame.K_d] or keys[pygame.K_RIGHT]  and self.x < windowWidth - self.width - self.vel:
+        if (keys[pygame.K_d] or keys[pygame.K_RIGHT])  and self.x < windowWidth - self.width - self.vel:
             self.x += self.vel
         
         if not(self.isJump) and keys[pygame.K_UP] or keys[pygame.K_SPACE]:
