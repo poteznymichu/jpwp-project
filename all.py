@@ -3,7 +3,9 @@ import sys
 import random
 import math as m
 
+
 class Player:
+
     def __init__(self, x, y, width, height, vel):
         self.x = x
         self.y = y
@@ -24,23 +26,27 @@ class Player:
             self.isJump = True
 
     def move(self, direction):
-        if direction == "LEFT" and self.x - self.vel > 15:
+        MAX_WIDTH = 640
+        if direction == "LEFT" and self.x - self.vel > 20:
             self.x -= self.vel
-        elif direction == "RIGHT" and self.x + self.vel < 500 - 14 - self.width:
+        elif direction == "RIGHT" and self.x + self.vel < MAX_WIDTH - 20 - self.width:
             self.x += self.vel
 
+
     def update_jump(self,platform):
-        print("x: " + str(self.x))
-        print("y: " + str(m.floor(self.y - self.height)))
-        print("latform _ x: " + str(m.floor(platform.random_x)))
-        print("latform _ width: " + str(platform.length_width))
+        #print("x: " + str(self.x))
+        #print("y: " + str(m.floor(self.y - self.height)))
+        #print("latform _ x: " + str(m.floor(platform.random_x)))
+        #print("latform _ width: " + str(platform.length_width))
         if self.isJump:
-            if self.jumpCount >= -4:
-                self.y -= (self.jumpCount * abs(self.jumpCount)) * 0.5
+            if self.jumpCount >= -8:
+                self.y -= (self.jumpCount * abs(self.jumpCount)) * 0.5 + self.jumpCount
                 self.jumpCount -= 1
             else:
+                self.jumpCount = 8  
                 self.isJump = False
-                self.jumpCount = 8   
+
+
 
 class Platform:
 
@@ -52,7 +58,7 @@ class Platform:
         self.player = player
         self.space_available = self.MAX_WIDTH//2
         self.length_width = random.randint(player.width*2+10, self.space_available)
-        self.random_x = random.randint(self.length_width//2,self.MAX_WIDTH-self.length_width)
+        self.random_x = random.randint(15,self.MAX_WIDTH-self.length_width)
         self.random_y = self.player.y - BASE - self.player.height + 15
         self.image = pygame.image.load('platform3.png')
 
@@ -66,18 +72,19 @@ class Game:
         pygame.display.update()
 
     def main(self):
-        MAX_WIDTH = 500
-        MAX_HEIGHT = 500
-        player = Player(225, 450, 40, 60, 15)
+        MAX_WIDTH = 640
+        MAX_HEIGHT = 680
+        clock = pygame.time.Clock()
+        player = Player(MAX_WIDTH//2, MAX_HEIGHT-60, 40, 60, 8)
         pygame.init()
-        window = pygame.display.set_mode((500, 500))
+        window = pygame.display.set_mode((MAX_WIDTH, MAX_HEIGHT))
         pygame.display.set_caption("First Game")
         run = True
         bg = pygame.image.load("bg2.png")
         platform = Platform(player, MAX_WIDTH, MAX_HEIGHT)
 
         while run:
-            pygame.time.delay(100)
+            clock.tick(40)
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
                     run = False
