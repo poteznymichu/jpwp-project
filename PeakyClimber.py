@@ -9,7 +9,6 @@ class Game:
 
     def drawGameWindow(self, window, backGroundImage):
         window.blit(backGroundImage, (0, 0))
-        pygame.display.update()
 
     def main(self):
 
@@ -47,6 +46,7 @@ class Game:
             platform_group.draw(window)
             player.movement(keys , 640)
             player.drawPlayer(window)
+            pygame.display.update()
 
 
 

@@ -49,7 +49,6 @@ class Player:
         for platform in self.platformGroup : 
             if platform.rect.colliderect(self.rect) :
                 self.isOnPlatform = True
-
                 #check if above platform
                 if self.rect.bottom < platform.rect.centery :
                     if self.vel >= 0 :
