@@ -9,8 +9,8 @@ class Player:
         self.height = height
         self.vel = vel
         self.platformGroup = platformGroup
-        self.rect = pygame.Rect(self.x , self.y, self.width, self.height)
         self.player = pygame.image.load("./assets/player.jpg")
+        self.rect = self.player.get_rect()
         self.isOnPlatform = False
         self.isJump = False
         self.jumpCount = 8
@@ -36,7 +36,7 @@ class Player:
                 self.isJump = False
 
 
-        gravity = 3
+        gravity = 3.5
         if self.y < MAX_HEIGHT-PLAYER_HEIGHT and not(self.isJump) and not(self.isOnPlatform):
             self.jumpCount = -9
             self.y += gravity ** 2
@@ -66,4 +66,4 @@ class Player:
     def drawPlayer(self, window) :
         window.blit(self.player , (self.x , self.y))
         self.rect.update(self.x, self.y, self.width, self.height)
-        pygame.display.update()
+        # pygame.display.update()
