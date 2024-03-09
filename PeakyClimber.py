@@ -10,6 +10,7 @@ class Game:
 
     def drawGameWindow(self, window, backGroundImage):
         window.blit(backGroundImage, (0, 0))
+        pygame.display.update()
 
     def main(self):
 
@@ -54,24 +55,13 @@ class Game:
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
                     isPlaying = False
+            self.drawGameWindow(window, backGroundImage)
+            # platform_group.draw(window)
 
-            if isStartMenuOpen :
-                window.fill((202, 228, 241))
-                window.blit(title_surface, title_rect)
-
-                # rysowanie buttonow i sprawdzanie akcji jednoczesnie
-                if start_button.draw_button() :
-                    isStartMenuOpen = False
-
-                if exit_button.draw_button() :
-                    isPlaying = False
-                    
-            else :
-                keys = pygame.key.get_pressed()
-                self.drawGameWindow(window, backGroundImage)
-                platform_group.draw(window)
-                player.movement(keys , 640)
-                player.drawPlayer(window)
+            keys = pygame.key.get_pressed()
+            platform_group.draw(window)
+            player.movement(keys , 640)
+            player.drawPlayer(window)
 
             pygame.display.update()
 
