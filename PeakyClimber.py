@@ -21,10 +21,12 @@ class Game:
         # statyczne platformy
         platform_group = pygame.sprite.Group()
         p_y = MAX_HEIGHT
-        for p in range(5):
+        for p in range(6):
             p_w = random.randint(150,200)
             p_x = random.randint(10, MAX_WIDTH - p_w - 10)
             p_y -= 120 - p
+            if p == 5 :
+                p_x = -200
 
             platform = Platform(p_x, p_y, p_w)
             platform_group.add(platform)
@@ -41,7 +43,7 @@ class Game:
         exit_button_width, exit_button_height = exit_button_img.get_rect().size
         exit_button = Button((MAX_WIDTH - exit_button_width) / 2, (MAX_HEIGHT + exit_button_height) / 2, exit_button_img, window)
 
-        font = pygame.font.SysFont("./assets/font.ttf", 80)
+        font = pygame.font.SysFont(None, 80)
         title_surface = font.render("Peaky Climber", True, (255, 255, 255))
         title_rect = title_surface.get_rect()
         title_rect.center = (window.get_width() // 2, 100)
@@ -67,10 +69,9 @@ class Game:
                     isPlaying = False
                     
             else :
-                keys = pygame.key.get_pressed()
                 self.drawGameWindow(window, backGroundImage)
                 platform_group.draw(window)
-                player.movement(keys , 640)
+                player.movement(window.get_width())
                 player.drawPlayer(window)
 
             pygame.display.update()
