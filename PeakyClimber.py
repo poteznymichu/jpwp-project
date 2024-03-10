@@ -22,13 +22,13 @@ class Game:
         platform_group = pygame.sprite.Group()
         p_y = MAX_HEIGHT
         for p in range(6):
-            p_w = random.randint(150,200)
-            p_x = random.randint(10, MAX_WIDTH - p_w - 10)
+            p_width = random.randint(150,200)
+            p_x = random.randint(10, MAX_WIDTH - p_width - 10)
             p_y -= 120 - p
             if p == 5 :
                 p_x = -200
 
-            platform = Platform(p_x, p_y, p_w)
+            platform = Platform(p_x, p_y, p_width)
             platform_group.add(platform)
 
 
