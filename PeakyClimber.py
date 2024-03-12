@@ -21,14 +21,15 @@ class Game:
         # statyczne platformy
         platform_group = pygame.sprite.Group()
         p_y = MAX_HEIGHT
-        for p in range(6):
-            p_width = random.randint(150,200)
+        for p in range(5):
+            # p_width = random.randint(150,200)
+            p_width = 200
             p_x = random.randint(10, MAX_WIDTH - p_width - 10)
-            p_y -= 120 - p
+            p_y -= 130 - p
             if p == 5 :
                 p_x = -200
 
-            platform = Platform(p_x, p_y, p_width)
+            platform = Platform(p_x, p_y, "./assets/platform3.png")
             platform_group.add(platform)
 
 
@@ -50,29 +51,33 @@ class Game:
 
         isPlaying = True
         isStartMenuOpen = True
+        menuBackgroundImage = pygame.image.load("./assets/menuBackground.png")
         while isPlaying:
 
             clock.tick(40)
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
                     isPlaying = False
+                if event.type == pygame.KEYDOWN :
+                    if event.key == pygame.K_SPACE and not(player.isJump) :
+                        player.isJump = True
 
             if isStartMenuOpen :
-                window.fill((202, 228, 241))
-                window.blit(title_surface, title_rect)
+                window.blit(menuBackgroundImage,(0,0))
 
                 # rysowanie buttonow i sprawdzanie akcji jednoczesnie
                 if start_button.draw_button() :
                     isStartMenuOpen = False
-
                 if exit_button.draw_button() :
                     isPlaying = False
                     
             else :
+                
                 self.drawGameWindow(window, backGroundImage)
                 platform_group.draw(window)
                 player.movement(window.get_width())
-                player.drawPlayer(window)
+                player.drawPlayer(window) 
+                
 
             pygame.display.update()
 

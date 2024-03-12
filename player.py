@@ -4,9 +4,9 @@ class Player:
 
     def __init__(self, x, y, width, height, vel, platformGroup):
         self.x = x
-        self.y = y
         self.width = width
         self.height = height
+        self.y = MAX_HEIGHT - self.height
         self.vel = vel
         self.platformGroup = platformGroup
         self.player = pygame.image.load("./assets/player.jpg")
@@ -24,47 +24,48 @@ class Player:
 
         if (keys[pygame.K_d] or keys[pygame.K_RIGHT])  and self.x < windowWidth - self.width - self.vel:
             self.x += self.vel
-        
-        if not(self.isJump)  and  keys[pygame.K_SPACE]:
-            self.isJump = True
-            self.didJump = True
 
-        if self.isJump :
 
+        if self.isJump  :
             if self.jumpCount >= -8 :
-                self.y -= (self.jumpCount * abs(self.jumpCount)) * 0.5 + self.jumpCount
+                self.y -= (self.jumpCount * abs(self.jumpCount)) * 0.8
                 self.jumpCount -= 1
             else:
                 self.jumpCount = 8  
                 self.isJump = False
-                self.didJump = False
-
-
-        gravity = 3.5
-        if self.y < MAX_HEIGHT-PLAYER_HEIGHT and not(self.isJump) and not(self.isOnPlatform):
-            self.jumpCount = -9
-            self.y += gravity ** 2
-            gravity += 1
-        if self.y > MAX_HEIGHT-self.height : 
-            self.y = MAX_HEIGHT-self.height
-
-
-        for platform in self.platformGroup : 
-            if platform.rect.colliderect(self.rect) :
-                self.isOnPlatform = True
                 
-                #check if above platform
-                if self.rect.bottom < platform.rect.centery :
+        gravity = 3.5
+        if not self.isOnPlatform and not self.isJump : 
+            if self.y < MAX_HEIGHT - self.height: 
+                self.y +=gravity ** 2   
+                self.jumpCount = -9
+                
+        for platform in self.platformGroup : 
 
-                    if self.vel >= 0 :
+            if self.rect.colliderect(platform.rect) :
+
+                if self.rect.centery  <= platform.rect.top  :
                         self.jumpCount = 8
-                        if not(self.isJump) :
-                            self.y = platform.rect.centery - self.height - 8
+
                         self.isJump = False
-                        self.isOnPlatform = True
+                        if not self.isJump :
+                            self.y = platform.rect.top - self.height               
             else :
                 self.isOnPlatform = False
-                        
+                
+
+        for platform in self.platformGroup : 
+            if self.y == platform.rect.top - self.height and self.rect.right >= platform.rect.left and self.rect.left <= platform.rect.right:
+                self.isOnPlatform = True
+
+
+        if self.y > MAX_HEIGHT-self.height : 
+            self.y = MAX_HEIGHT-self.height
+            self.jumpCount = 8
+            self.isJump = False
+
+
+  
     def drawPlayer(self, window) :
         window.blit(self.player , (self.x , self.y))
         self.rect.update(self.x, self.y, self.width, self.height)
