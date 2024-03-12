@@ -90,7 +90,7 @@ class Game:
                 self.handlePlayerScore(player, platform_group, visitedPlatforms)
                 player.movement(window)
                 player.handlePlatforms(platform_group, window)
-                player.handleGravity(4)
+                player.handleGravity(3.5)
                 player.drawPlayer(window) 
                 
 
