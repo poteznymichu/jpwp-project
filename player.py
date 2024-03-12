@@ -44,7 +44,7 @@ class Player:
 
             if self.rect.colliderect(platform.rect) :
 
-                if self.rect.centery  <= platform.rect.top  :
+                if self.rect.centery  <= platform.rect.top and self.jumpCount <= 0 :
                         self.jumpCount = 8
 
                         self.isJump = False
