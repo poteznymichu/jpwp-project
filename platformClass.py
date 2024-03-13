@@ -1,15 +1,3 @@
-# import pygame
-
-# class Platform(pygame.sprite.Sprite):
-
-#     def __init__(self, x, y, width):
-#         pygame.sprite.Sprite.__init__(self)
-#         imageLoader = pygame.image.load('./assets/platform3.png')
-#         self.image = pygame.transform.scale(imageLoader,(width,80))
-#         self.rect = self.image.get_rect()
-#         self.rect.x = x
-#         self.rect.y = y
-     
 import pygame
 
 class Platform(pygame.sprite.Sprite):
@@ -21,3 +9,14 @@ class Platform(pygame.sprite.Sprite):
         self.rect = self.image.get_rect()
         self.rect.x = x
         self.rect.y = y
+
+    def update(self , player, platform_group) :
+     
+        if player.score > 1 :
+            player.y += 5/len(platform_group)
+            self.rect.y += 5
+
+        if self.rect.top - player.height>= 680 :
+            self.kill()
+
+        
