@@ -40,12 +40,12 @@ class Player:
 
             if self.rect.colliderect(platform.rect) :
                 if self.rect.centery  < platform.rect.top and self.jumpCount <= 0 :
-
                         self.jumpCount = 8
                         self.isJumping = False
                         if not self.isJumping :
                             self.y = platform.rect.top - self.height 
                             self.isOnPlatform = True
+                            self.score+=1
             else :
                 self.isOnPlatform = False
 
@@ -64,14 +64,15 @@ class Player:
         if self.isOnPlatform or self.y == MAX_HEIGHT - self.height :
             jumpSound.play() 
 
-    def setScore(self, platformGroup, visitedPlatforms) :
-
-        for platform in platformGroup :
-            if self.y == platform.rect.top - self.height :
-                if platform.rect.top not in visitedPlatforms :
-                    self.score += 1
-                    visitedPlatforms.append(platform.rect.top) 
+    #chyba useless ta klasa chyba że gdzieś tam do zapisywania punktu coś się używa
+    """
+    def setScore(self, platformGroup, visitedPlatforms):
+        for platform in platformGroup:
+            if self.y == platform.rect.top - self.height:
+                if platform.rect.top not in visitedPlatforms:
+                    visitedPlatforms.append(platform.rect.top)
         self.setHighestScore()
+    """
   
     def setHighestScore(self) :
 

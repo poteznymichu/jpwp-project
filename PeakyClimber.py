@@ -18,10 +18,12 @@ class Game:
         for i in range(0,2) :
             window.blit(backGroundImage, (0, -1 *i * MAX_HEIGHT + self.scroll))
 
-        self.scroll += 1.5
+        self.scroll += 0.5
 
         if abs(self.scroll) > MAX_HEIGHT :
             self.scroll = 0
+
+
 
     def play_music(self):
         pygame.mixer.init()
@@ -37,6 +39,14 @@ class Game:
         pygame.display.set_caption("Peaky Climber")
 
         window = pygame.display.set_mode((MAX_WIDTH, MAX_HEIGHT))
+
+        
+        def show_score(x,y):
+            font = pygame.font.Font('freesansbold.ttf',32)
+            score_show = font.render(str(player.score),True,(0,0,0))
+            window.blit(score_show,(x,y))
+
+
         backGroundImage = pygame.image.load("./assets/bg2.png")
       
         platform_group = pygame.sprite.Group()
@@ -65,7 +75,7 @@ class Game:
 
         music_thread = threading.Thread(target=self.play_music)
         # music_thread.start()
-
+        platformImage = "./assets/platform3.png"
 
         p_y = 470
         while isPlaying:
@@ -95,12 +105,16 @@ class Game:
                     
             elif Game_State == "game" :
 
-                if len(platform_group) < 10 :  
+
+                if len(platform_group) < 5 :  
+                    if player.score > 50:
+                        backGroundImage = pygame.image.load("./assets/level2.png")
+                        platformImage = "./assets/platforma2.png"
                     p_width = 200
                     p_x = random.randint(30, MAX_WIDTH - p_width - 30)
                     second_platform = platform_group.sprites()[len(platform_group) - 1]
                     p_y = second_platform.rect.y - 160
-                    platform = Platform(p_x, p_y, "./assets/platform3.png")
+                    platform = Platform(p_x, p_y, f'{platformImage}')
                     platform_group.add(platform)
 
                 self.drawGameWindow(window, backGroundImage)
@@ -108,11 +122,15 @@ class Game:
                 player.movement(window)
                 player.handlePlatforms(platform_group, window)
                 player.handleGravity(3.5)
-                player.setScore(platform_group, visitedPlatforms)
+                show_score(40,640)
+                #player.setScore(platform_group, visitedPlatforms)
                 player.drawPlayer(window) 
 
                 if player.rect.top> MAX_HEIGHT :
                     Game_State = "Dead"
+
+                print("jaki score: " + str(player.score))
+                #score is broken
 
             elif Game_State == "Dead" :
                 window.blit(menuBackgroundImage,(0,0))
