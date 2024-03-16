@@ -1,4 +1,5 @@
 import pygame
+from consts import *
 
 class Platform(pygame.sprite.Sprite):
 
@@ -13,10 +14,10 @@ class Platform(pygame.sprite.Sprite):
     def update(self , player, platform_group) :
      
         if player.score > 1 :
-            player.y += 5/len(platform_group)
             self.rect.y += 5
+            player.y += 5/(len(platform_group))
 
-        if self.rect.top - player.height>= 680 :
+        if self.rect.top - player.height>= MAX_HEIGHT :
             self.kill()
 
         

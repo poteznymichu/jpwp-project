@@ -14,6 +14,7 @@ class Player:
         self.isJumping = False
         self.jumpCount = 8
         self.score = 0
+        self.isFalling = False
 
     def movement(self, window):
 
@@ -26,54 +27,68 @@ class Player:
 
         if self.isJumping  :
             if self.jumpCount >= -8 :
-                self.y -= (self.jumpCount * abs(self.jumpCount)) * 0.8
+                self.y -= (self.jumpCount * abs(self.jumpCount)) * 1
                 self.jumpCount -= 1
             else:
                 self.jumpCount = 8  
                 self.isJumping = False
+            
+        # gravity - bugged
+        if not self.isOnPlatform and not self.isJumping :
+            self.y += self.velocity * 2
+            self.isFalling = True
+        else:
+            self.isFalling = False 
+
                 
 
     def handlePlatforms(self,platform_group, window):
         platform_group.draw(window)
 
-        for platform in platform_group : 
+        if self.isFalling :
+            for platform in platform_group : 
+                if self.rect.colliderect(platform.rect) :
+                    if round(self.rect.centery)  < round(platform.rect.top) :
+                            
+                            self.jumpCount = 8
+                            self.isJumping = False
+                            if not self.isJumping :
+                                self.y = platform.rect.top - self.height 
+                                self.isOnPlatform = True
+                                self.score+=1
+                else :
+                    self.isOnPlatform = False
+        else : 
+            for platform in platform_group : 
+                if self.rect.colliderect(platform.rect) :
+                    if round(self.rect.centery)  < round(platform.rect.top) and self.jumpCount <= 0 :
+                            
+                            self.jumpCount = 8
+                            self.isJumping = False
+                            if not self.isJumping :
+                                self.y = platform.rect.top - self.height 
+                                self.isOnPlatform = True
+                                self.score+=1
+                else :
+                    self.isOnPlatform = False
 
-            if self.rect.colliderect(platform.rect) :
-                if self.rect.centery  < platform.rect.top and self.jumpCount <= 0 :
-                        self.jumpCount = 8
-                        self.isJumping = False
-                        if not self.isJumping :
-                            self.y = platform.rect.top - self.height 
-                            self.isOnPlatform = True
-                            self.score+=1
-            else :
-                self.isOnPlatform = False
-
         for platform in platform_group : 
-            if self.y == platform.rect.top - self.height and self.rect.right >= platform.rect.left and self.rect.left <= platform.rect.right:
+            if round(self.y) == round(platform.rect.top) - self.height and round(self.rect.right) >= round(platform.rect.left) and round(self.rect.left) <= round(platform.rect.right):
                 self.isOnPlatform = True
                 self.y = platform.rect.top - self.height
 
-    def handleGravity(self, gravity):
+    def drawPlayer(self, window) :
+        window.blit(self.player , (self.x , self.y))
+        self.rect.update(self.x, self.y, self.width, self.height)
+        self.rect.y = self.y
+        self.rect.x = self.x
 
-        if not self.isOnPlatform and not self.isJumping : 
-                self.y += gravity ** 2   
-                self.jumpCount = -9
 
     def jumpSound(self,jumpSound) :
         if self.isOnPlatform or self.y == MAX_HEIGHT - self.height :
             jumpSound.play() 
 
-    #chyba useless ta klasa chyba że gdzieś tam do zapisywania punktu coś się używa
-    """
-    def setScore(self, platformGroup, visitedPlatforms):
-        for platform in platformGroup:
-            if self.y == platform.rect.top - self.height:
-                if platform.rect.top not in visitedPlatforms:
-                    visitedPlatforms.append(platform.rect.top)
-        self.setHighestScore()
-    """
-  
+
     def setHighestScore(self) :
 
         with open('./highestScore.txt', 'r') as file:
@@ -84,7 +99,4 @@ class Player:
                 file.write(str(self.score))
 
 
-    def drawPlayer(self, window) :
-        window.blit(self.player , (self.x , self.y))
-        self.rect.update(self.x, self.y, self.width, self.height)
 
