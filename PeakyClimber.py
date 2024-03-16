@@ -93,7 +93,7 @@ class Game:
         exitButtonText_renderer = font.render(exitButtonText, True, (255, 255, 255))
 
         reset_button = Button((20) , (MAX_HEIGHT - 1*button_height) / 2 + 150, exit_button_img, window)
-        resetButtonText = " PLAY\nAGAIN"
+        resetButtonText = "PLAY \n AGAIN"
         resetButtonText_renderer = smallFont.render(resetButtonText, True, (255, 255, 255))
 
         ############ Music thread ############

@@ -8,31 +8,53 @@ class Player:
         self.x = x
         self.y = y
         self.velocity = velocity
-        self.player = pygame.image.load("./assets/player.jpg")
+        self.player = pygame.image.load("./player/player.png")
         self.rect = self.player.get_rect()
         self.isOnPlatform = True
         self.isJumping = False
         self.jumpCount = 8
         self.score = 0
         self.isFalling = False
+        self.isLeft = False
+        self.isRight = False
 
     def movement(self, window):
-
         keys = pygame.key.get_pressed()
-        if (keys[pygame.K_a] or keys[pygame.K_LEFT]) and self.x > self.velocity:
-            self.x -= self.velocity
-
-        if (keys[pygame.K_d] or keys[pygame.K_RIGHT])  and self.x < window.get_width() - self.width - self.velocity :
-            self.x += self.velocity
 
         if self.isJumping  :
-            if self.jumpCount >= -8 :
-                self.y -= (self.jumpCount * abs(self.jumpCount)) * 1
-                self.jumpCount -= 1
-            else:
-                self.jumpCount = 8  
-                self.isJumping = False
-            
+                if self.jumpCount >= -8 :
+                    self.y -= (self.jumpCount * abs(self.jumpCount)) * 1
+                    self.jumpCount -= 1
+                    if self.jumpCount < 0:
+                        if self.isLeft:
+                            self.player = pygame.image.load("./player/jumpDownl.png")
+                        else:
+                            self.player = pygame.image.load("./player/jumpDownr.png")
+                    else: 
+                        if self.isLeft:
+                            self.player = pygame.image.load("./player/jumpUpl.png")
+                        else:
+                            self.player = pygame.image.load("./player/jumpUpr.png")
+                else:
+                    self.jumpCount = 8  
+                    self.isJumping = False
+        else:
+            self.player = pygame.image.load("./player/player.png")
+    
+
+        if (keys[pygame.K_a] or keys[pygame.K_LEFT]) and self.x > self.velocity:
+            self.player = pygame.image.load("./player/l1.png")
+            self.isLeft = True
+            self.isRight = False
+            self.x -= self.velocity
+
+
+        if (keys[pygame.K_d] or keys[pygame.K_RIGHT])  and self.x < window.get_width() - self.width - self.velocity :
+            self.player = pygame.image.load("./player/r1.png")
+            self.isRight = True
+            self.isLeft = False
+            self.x += self.velocity
+
         # gravity - bugged
         if not self.isOnPlatform and not self.isJumping :
             self.y += self.velocity * 2
@@ -46,6 +68,10 @@ class Player:
         platform_group.draw(window)
 
         if self.isFalling :
+            if self.isLeft:
+                self.player = pygame.image.load("./player/jumpDownl.png")
+            else:
+                self.player = pygame.image.load("./player/jumpDownr.png")
             for platform in platform_group : 
                 if self.rect.colliderect(platform.rect) :
                     if round(self.rect.centery)  < round(platform.rect.top) :

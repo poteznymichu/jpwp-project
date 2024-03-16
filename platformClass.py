@@ -10,12 +10,24 @@ class Platform(pygame.sprite.Sprite):
         self.rect = self.image.get_rect()
         self.rect.x = x
         self.rect.y = y
+        self.isMovingLeft = False
 
     def update(self , player, platform_group) :
      
         if player.score > 1 :
             self.rect.y += 5
+            # if self.isMovingLeft :
+            #     self.rect.x -= 2
+            # else :
+            #     self.rect.x += 1
+
+            # if self.rect.x > 410 :
+            #     self.isMovingLeft = True
+
+            # if self.rect.x < 30 :
+            #     self.isMovingLeft = False
             player.y += 5/(len(platform_group))
+
 
         if self.rect.top - player.height>= MAX_HEIGHT :
             self.kill()
