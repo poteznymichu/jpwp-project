@@ -17,6 +17,7 @@ class Player:
         self.isFalling = False
         self.isLeft = False
         self.isRight = False
+        self.HP = 3
 
     def movement(self, window):
         keys = pygame.key.get_pressed()
@@ -40,14 +41,23 @@ class Player:
                     self.isJumping = False
         else:
             self.player = pygame.image.load("./player/player.png")
-    
+
+
+        # shifting player's y coordinate to align him with platform
+        if self.score > 1 and self.score < 30 :
+            self.y += 5
+        elif self.score >= 30 and self.score < 60 :
+            self.y += 6
+        elif self.score >= 60 and self.score < 100 :
+            self.y += 7
+        elif self.score >= 100 :
+            self.y += 8
 
         if (keys[pygame.K_a] or keys[pygame.K_LEFT]) and self.x > self.velocity:
             self.player = pygame.image.load("./player/l1.png")
             self.isLeft = True
             self.isRight = False
             self.x -= self.velocity
-
 
         if (keys[pygame.K_d] or keys[pygame.K_RIGHT])  and self.x < window.get_width() - self.width - self.velocity :
             self.player = pygame.image.load("./player/r1.png")
@@ -124,5 +134,29 @@ class Player:
             with open('./highestScore.txt', 'w') as file:
                 file.write(str(self.score))
 
+
+    def handlePlayerHP(self,window) :
+        greyHeart = pygame.image.load("./assets/greyHeart.png")
+        redHeart = pygame.image.load("./assets/redHeart.png")
+        scaledGreyHeart = pygame.transform.scale(greyHeart, (60,60))
+        scaledRedHeart = pygame.transform.scale(redHeart, (60,60))
+
+        if self.HP >= 1 :
+            window.blit(scaledRedHeart, (450,720))
+        else :
+            window.blit(scaledGreyHeart, (450,720))
+
+        if self.HP >= 2 :
+            window.blit(scaledRedHeart, (510,720))
+        else :
+            window.blit(scaledGreyHeart, (510,720))
+
+        if self.HP == 3 :
+            window.blit(scaledRedHeart, (570,720))
+        else :
+            window.blit(scaledGreyHeart, (570,720))
+
+
+    
 
 

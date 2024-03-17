@@ -5,8 +5,12 @@ from platformClass import Platform
 from button import Button
 import random
 from consts import *
+from fireball import fireballClass
 import threading
+import ctypes
 
+# setting taskbar icon
+ctypes.windll.shell32.SetCurrentProcessExplicitAppUserModelID("./player/player.png")
 
 
 class Game:
@@ -29,11 +33,13 @@ class Game:
         pygame.mixer.music.play(-1) 
         pygame.mixer.music.set_volume(0.03)
 
-    def reset_game(self, player, platform_group, Game_State):
+    def reset_game(self, player, platform_group, Game_State , fireball_group):
+        player.HP = 3
         player.score = 0
         player.x = 400
         player.y = 680 - PLAYER_HEIGHT
         platform_group.empty()
+        fireball_group.empty()
         initial_platform = Platform(300, 680, "./assets/platforma6.png")
         platform_group.add(initial_platform)
         self.scroll = 0
@@ -54,11 +60,27 @@ class Game:
             platform = Platform(p_x, p_y, "./assets/platforma6.png")
             platform_group.add(platform)
 
+    # def fireballGenerator(self,player,fireball_group,canSpawnFireball,window) :
+    #     # if player.score %9 == 0 and player.score != 0:
+    #     #     canSpawnFireball = True
+
+    #     if player.score %10 == 0 and canSpawnFireball :
+    #         f_x = random.randint(max (player.x - 200 , 30) , min( 600 , player.x + 200))
+    #         fireball = fireballClass(f_x,-100,10)
+    #         fireball_group.add(fireball)
+    #         canSpawnFireball = False
+
+    #     for fireball in fireball_group :
+    #         fireball.update(window,player)
+
+    #     return canSpawnFireball
+
     def main(self):
 
         pygame.init()
         pygame.mixer.init()
         pygame.display.set_caption("Peaky Climber")
+        pygame.display.set_icon(pygame.image.load("./player/player.png"))
 
         window = pygame.display.set_mode((MAX_WIDTH, MAX_HEIGHT))
         clock = pygame.time.Clock()
@@ -104,6 +126,10 @@ class Game:
         ############ Game loop ############
         Game_State = "menu"
         isPlaying = True
+
+        fireball_group = pygame.sprite.Group()
+        canSpawnFireball = False
+
         while isPlaying:
 
             clock.tick(50)
@@ -133,13 +159,25 @@ class Game:
 
                 self.platformGenerator(platform_group)
                 self.drawGameWindow(window, backGroundImage)
-                platform_group.update(player,platform_group)
+                platform_group.update(player)
                 player.handlePlatforms(platform_group, window)
                 player.movement(window)
                 player.drawPlayer(window) 
-                self.show_score(240,720,window, player)
+                self.show_score(240,730,window, player)
+                player.handlePlayerHP(window)
 
-                if player.rect.top > MAX_HEIGHT :
+                if player.score %9 == 0 and player.score %10 != 0 and player.score > 2 :
+                    canSpawnFireball = True
+                if player.score %10 == 0 and canSpawnFireball :
+                    f_x = random.randint(max (player.x - 200 , 30) , min( 600 , player.x + 200))
+                    fireball = fireballClass(f_x,-100,10)
+                    fireball_group.add(fireball)
+                    canSpawnFireball = False
+
+                for fireball in fireball_group :
+                    fireball.update(window,player)
+
+                if player.rect.top > MAX_HEIGHT or player.HP == 0:
                     Game_State = "Dead"
 
             elif Game_State == "Dead" :
@@ -150,7 +188,7 @@ class Game:
                 self.show_score(50,430,window,player)
 
                 if reset_button.draw_button() :
-                    Game_State = self.reset_game(player, platform_group, Game_State)
+                    Game_State = self.reset_game(player, platform_group, Game_State, fireball_group)
                 window.blit(resetButtonText_renderer, (65, 500))
 
             pygame.display.update()
