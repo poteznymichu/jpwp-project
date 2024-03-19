@@ -9,6 +9,7 @@ class fireballClass(pygame.sprite.Sprite) :
         self.speed = speed
         self.image = pygame.transform.scale(pygame.image.load("./assets/fireball1.png"), (40,70))
         self.rect = pygame.Rect(self.x + 5 , self.y + 10, 30, 50)
+        self.damageNoise = pygame.mixer.Sound("./assets/damage.mp3")
 
     def update(self,window , player) :
         window.blit(self.image, (self.x , self.y))
@@ -17,8 +18,14 @@ class fireballClass(pygame.sprite.Sprite) :
 
         if self.rect.colliderect(player.rect) :
             player.HP -= 1
+            self.damageNoise.set_volume(0.2)
+            self.damageNoise.play()  
             self.y = MAX_HEIGHT 
             self.kill()
+        
+        if player.HP == 0 :
+            self.kill()
+
         
 
     

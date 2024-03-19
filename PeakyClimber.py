@@ -17,12 +17,14 @@ class Game:
 
     def __init__(self) :
         self.scroll = 0
+        self.canSpawnFireball = False
 
     def drawGameWindow(self, window, backGroundImage):
+
         for i in range(0,2) :
             window.blit(backGroundImage, (0, -1 *i * MAX_HEIGHT+ self.scroll))
 
-        self.scroll += 1.5
+        self.scroll += 2
         if abs(self.scroll) >= MAX_HEIGHT  :
             self.scroll = 0
 
@@ -31,7 +33,7 @@ class Game:
         pygame.mixer.init()
         pygame.mixer.music.load("./assets/music.mp3")
         pygame.mixer.music.play(-1) 
-        pygame.mixer.music.set_volume(0.03)
+        pygame.mixer.music.set_volume(0.01)
 
     def reset_game(self, player, platform_group, Game_State , fireball_group):
         player.HP = 3
@@ -60,20 +62,19 @@ class Game:
             platform = Platform(p_x, p_y, "./assets/platforma6.png")
             platform_group.add(platform)
 
-    # def fireballGenerator(self,player,fireball_group,canSpawnFireball,window) :
-    #     # if player.score %9 == 0 and player.score != 0:
-    #     #     canSpawnFireball = True
+    def fireballGenerator(self,player,fireball_group,window) :
+                
+                if player.score %9 == 0 and player.score %10 != 0 and player.score > 75 :
+                    self.canSpawnFireball = True
 
-    #     if player.score %10 == 0 and canSpawnFireball :
-    #         f_x = random.randint(max (player.x - 200 , 30) , min( 600 , player.x + 200))
-    #         fireball = fireballClass(f_x,-100,10)
-    #         fireball_group.add(fireball)
-    #         canSpawnFireball = False
+                if player.score % 10 == 0 and self.canSpawnFireball and player.score > 75 :
+                    f_x = random.randint(max (player.x - 200 , 30) , min( 600 , player.x + 200))
+                    fireball = fireballClass(f_x,-100,10)
+                    fireball_group.add(fireball)
+                    self.canSpawnFireball = False
 
-    #     for fireball in fireball_group :
-    #         fireball.update(window,player)
-
-    #     return canSpawnFireball
+                for fireball in fireball_group :
+                    fireball.update(window,player)
 
     def main(self):
 
@@ -95,9 +96,9 @@ class Game:
         backGroundImage = pygame.image.load("./assets/background2.png")
         menuBackgroundImage = pygame.image.load("./assets/tower2.png")
         jumpSound = pygame.mixer.Sound("./assets/jumpSound.mp3")
-        platformImage = "./assets/platforma6.png"
+        jumpSound.set_volume(0.2)
         font = pygame.font.Font("./assets/fontt.otf", 56)
-        smallFont = pygame.font.Font("./assets/fontt.otf", 32)
+        smallFont = pygame.font.Font("./assets/fontt.otf", 36)
         title = "Peaky Climber"
         title_render = font.render(title, True, (255, 255, 255))
 
@@ -105,18 +106,15 @@ class Game:
         start_button_img = pygame.image.load("./assets/start_btn_3.png")
         button_height = start_button_img.get_rect().height
         start_button = Button((20) , (MAX_HEIGHT - 1*button_height) / 2 + 50, start_button_img, window)
-        startButtonText = "START"
-        startButtonText_renderer = font.render(startButtonText, True, (255, 255, 255))
+        startButtonText_renderer = font.render("START", True, (255, 255, 255))
 
         exit_button_img = pygame.image.load("./assets/exit_btn_3.png")
         exit_button_height = exit_button_img.get_rect().height
         exit_button = Button((20) , (MAX_HEIGHT + exit_button_height) / 2 + 100, exit_button_img, window)
-        exitButtonText = "EXIT"
-        exitButtonText_renderer = font.render(exitButtonText, True, (255, 255, 255))
+        exitButtonText_renderer = font.render("EXIT", True, (255, 255, 255))
 
         reset_button = Button((20) , (MAX_HEIGHT - 1*button_height) / 2 + 150, exit_button_img, window)
-        resetButtonText = "PLAY \n AGAIN"
-        resetButtonText_renderer = smallFont.render(resetButtonText, True, (255, 255, 255))
+        resetButtonText_renderer = smallFont.render("RESTART", True, (255, 255, 255))
 
         ############ Music thread ############
         music_thread = threading.Thread(target=self.play_music)
@@ -128,7 +126,6 @@ class Game:
         isPlaying = True
 
         fireball_group = pygame.sprite.Group()
-        canSpawnFireball = False
 
         while isPlaying:
 
@@ -161,23 +158,19 @@ class Game:
                 self.drawGameWindow(window, backGroundImage)
                 platform_group.update(player)
                 player.handlePlatforms(platform_group, window)
-                player.movement(window)
+
+                if player.HP > 0 :
+                    player.movement(window)
+
                 player.drawPlayer(window) 
-                self.show_score(240,730,window, player)
+                player.deathAnimation()
                 player.handlePlayerHP(window)
 
-                if player.score %9 == 0 and player.score %10 != 0 and player.score > 2 :
-                    canSpawnFireball = True
-                if player.score %10 == 0 and canSpawnFireball :
-                    f_x = random.randint(max (player.x - 200 , 30) , min( 600 , player.x + 200))
-                    fireball = fireballClass(f_x,-100,10)
-                    fireball_group.add(fireball)
-                    canSpawnFireball = False
 
-                for fireball in fireball_group :
-                    fireball.update(window,player)
+                self.show_score(240,730,window, player)
+                self.fireballGenerator(player,fireball_group,window)
 
-                if player.rect.top > MAX_HEIGHT or player.HP == 0:
+                if player.rect.top > MAX_HEIGHT :
                     Game_State = "Dead"
 
             elif Game_State == "Dead" :
@@ -189,7 +182,7 @@ class Game:
 
                 if reset_button.draw_button() :
                     Game_State = self.reset_game(player, platform_group, Game_State, fireball_group)
-                window.blit(resetButtonText_renderer, (65, 500))
+                window.blit(resetButtonText_renderer, (35, 515))
 
             pygame.display.update()
 

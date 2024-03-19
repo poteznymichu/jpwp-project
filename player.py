@@ -18,6 +18,8 @@ class Player:
         self.isLeft = False
         self.isRight = False
         self.HP = 3
+        self.canDieRotate = False
+
 
     def movement(self, window):
         keys = pygame.key.get_pressed()
@@ -65,7 +67,6 @@ class Player:
             self.isLeft = False
             self.x += self.velocity
 
-        # gravity - bugged
         if not self.isOnPlatform and not self.isJumping :
             self.y += self.velocity * 2
             self.isFalling = True
@@ -114,6 +115,7 @@ class Player:
                 self.y = platform.rect.top - self.height
 
     def drawPlayer(self, window) :
+
         window.blit(self.player , (self.x , self.y))
         self.rect.update(self.x, self.y, self.width, self.height)
         self.rect.y = self.y
@@ -155,6 +157,17 @@ class Player:
             window.blit(scaledRedHeart, (570,720))
         else :
             window.blit(scaledGreyHeart, (570,720))
+
+    def deathAnimation(self) :
+
+        if self.HP == 1 :
+            self.canDieRotate = True
+                    
+        if self.HP == 0 and self.canDieRotate :
+            self.player = pygame.transform.rotate(self.player, 180)
+            self.canDieRotate = False
+        if self.HP == 0:
+            self.y += 12
 
 
     
