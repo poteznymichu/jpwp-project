@@ -4,7 +4,7 @@ from consts import *
 class Button :
     def __init__(self,x,y,image,window):
         self.window = window
-        self.image = image
+        self.image = image.convert_alpha()
         self.rect = self.image.get_rect()
         self.rect.topleft = (x,y)
         self.hovered = False

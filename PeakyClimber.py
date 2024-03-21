@@ -93,8 +93,8 @@ class Game:
         player = Player(window.get_width()/2, 680 - PLAYER_HEIGHT , PLAYER_WIDTH, PLAYER_HEIGHT, 8)
 
         ############ Images and fonts ############
-        backGroundImage = pygame.image.load("./assets/background2.png")
-        menuBackgroundImage = pygame.image.load("./assets/tower2.png")
+        backGroundImage = pygame.image.load("./assets/background2.png").convert_alpha()
+        menuBackgroundImage = pygame.image.load("./assets/tower2.png").convert_alpha()
         jumpSound = pygame.mixer.Sound("./assets/jumpSound.mp3")
         jumpSound.set_volume(0.2)
         font = pygame.font.Font("./assets/fontt.otf", 56)
@@ -103,12 +103,12 @@ class Game:
         title_render = font.render(title, True, (255, 255, 255))
 
         ############ Buttons ############
-        start_button_img = pygame.image.load("./assets/start_btn_3.png")
+        start_button_img = pygame.image.load("./assets/start_btn_3.png").convert_alpha()
         button_height = start_button_img.get_rect().height
         start_button = Button((20) , (MAX_HEIGHT - 1*button_height) / 2 + 50, start_button_img, window)
         startButtonText_renderer = font.render("START", True, (255, 255, 255))
 
-        exit_button_img = pygame.image.load("./assets/exit_btn_3.png")
+        exit_button_img = pygame.image.load("./assets/exit_btn_3.png").convert_alpha()
         exit_button_height = exit_button_img.get_rect().height
         exit_button = Button((20) , (MAX_HEIGHT + exit_button_height) / 2 + 100, exit_button_img, window)
         exitButtonText_renderer = font.render("EXIT", True, (255, 255, 255))

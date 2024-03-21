@@ -7,7 +7,7 @@ class fireballClass(pygame.sprite.Sprite) :
         self.x = x
         self.y = y
         self.speed = speed
-        self.image = pygame.transform.scale(pygame.image.load("./assets/fireball1.png"), (40,70))
+        self.image = pygame.transform.scale(pygame.image.load("./assets/fireball1.png").convert_alpha(), (40,70))
         self.rect = pygame.Rect(self.x + 5 , self.y + 10, 30, 50)
         self.damageNoise = pygame.mixer.Sound("./assets/damage.mp3")
 

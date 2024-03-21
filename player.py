@@ -8,7 +8,7 @@ class Player:
         self.x = x
         self.y = y
         self.velocity = velocity
-        self.player = pygame.image.load("./player/player.png")
+        self.player = pygame.image.load("./player/player.png").convert_alpha()
         self.rect = self.player.get_rect()
         self.isOnPlatform = True
         self.isJumping = False
@@ -30,19 +30,19 @@ class Player:
                     self.jumpCount -= 1
                     if self.jumpCount < 0:
                         if self.isLeft:
-                            self.player = pygame.image.load("./player/jumpDownl.png")
+                            self.player = pygame.image.load("./player/jumpDownl.png").convert_alpha()
                         else:
-                            self.player = pygame.image.load("./player/jumpDownr.png")
+                            self.player = pygame.image.load("./player/jumpDownr.png").convert_alpha()
                     else: 
                         if self.isLeft:
-                            self.player = pygame.image.load("./player/jumpUpl.png")
+                            self.player = pygame.image.load("./player/jumpUpl.png").convert_alpha()
                         else:
-                            self.player = pygame.image.load("./player/jumpUpr.png")
+                            self.player = pygame.image.load("./player/jumpUpr.png").convert_alpha()
                 else:
                     self.jumpCount = 8  
                     self.isJumping = False
         else:
-            self.player = pygame.image.load("./player/player.png")
+            self.player = pygame.image.load("./player/player.png").convert_alpha()
 
 
         # shifting player's y coordinate to align him with platform
@@ -56,13 +56,13 @@ class Player:
             self.y += 8
 
         if (keys[pygame.K_a] or keys[pygame.K_LEFT]) and self.x > self.velocity:
-            self.player = pygame.image.load("./player/l1.png")
+            self.player = pygame.image.load("./player/l1.png").convert_alpha()
             self.isLeft = True
             self.isRight = False
             self.x -= self.velocity
 
         if (keys[pygame.K_d] or keys[pygame.K_RIGHT])  and self.x < window.get_width() - self.width - self.velocity :
-            self.player = pygame.image.load("./player/r1.png")
+            self.player = pygame.image.load("./player/r1.png").convert_alpha()
             self.isRight = True
             self.isLeft = False
             self.x += self.velocity
@@ -80,9 +80,9 @@ class Player:
 
         if self.isFalling :
             if self.isLeft:
-                self.player = pygame.image.load("./player/jumpDownl.png")
+                self.player = pygame.image.load("./player/jumpDownl.png").convert_alpha()
             else:
-                self.player = pygame.image.load("./player/jumpDownr.png")
+                self.player = pygame.image.load("./player/jumpDownr.png").convert_alpha()
             for platform in platform_group : 
                 if self.rect.colliderect(platform.rect) :
                     if round(self.rect.centery)  < round(platform.rect.top) :
@@ -138,8 +138,8 @@ class Player:
 
 
     def handlePlayerHP(self,window) :
-        greyHeart = pygame.image.load("./assets/greyHeart.png")
-        redHeart = pygame.image.load("./assets/redHeart.png")
+        greyHeart = pygame.image.load("./assets/greyHeart.png").convert_alpha()
+        redHeart = pygame.image.load("./assets/redHeart.png").convert_alpha()
         scaledGreyHeart = pygame.transform.scale(greyHeart, (60,60))
         scaledRedHeart = pygame.transform.scale(redHeart, (60,60))
 
