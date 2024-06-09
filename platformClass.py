@@ -10,18 +10,18 @@ class Platform(pygame.sprite.Sprite):
         self.rect.x = x
         self.rect.y = y
         self.isMovingLeft = False
-        self.downSpeed = 5
+        self.downSpeed = 4
         self.leftSpeed = 4
         self.rightSpeed = 2
 
     def update(self , player) :
 
         if player.score >= 30 and player.score < 60 :
-            self.downSpeed = 6
+            self.downSpeed = 5
         elif player.score >= 60 and player.score < 100 :
-            self.downSpeed = 7
+            self.downSpeed = 6
         elif player.score >= 100 :
-            self.downSpeed  = 8
+            self.downSpeed  = 7
 
         if player.score > 1 :
             

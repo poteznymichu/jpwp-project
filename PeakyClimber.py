@@ -53,21 +53,28 @@ class Game:
         score_show = font.render(("Score "+ str(player.score)),True,(255,255,255))
         window.blit(score_show,(x,y))
 
-    def platformGenerator(self, platform_group) :
+    def platformGenerator(self, platform_group,player) :
         if len(platform_group) < 10 :  
             p_width = 200
             p_x = random.randint(30, MAX_WIDTH - p_width - 30)
             previous_platform = platform_group.sprites()[len(platform_group) - 1]
             p_y = previous_platform.rect.y - 160
-            platform = Platform(p_x, p_y, "./assets/platforma6.png")
+            
+            platform_sprite = "./assets/platforma6.png"
+            if player.score >= 20 and player.score <= 56 :
+                platform_sprite = "./assets/platform2.png"
+            elif player.score > 56 :
+                platform_sprite = "./assets/platform3.png"
+
+            platform = Platform(p_x, p_y, platform_sprite)
             platform_group.add(platform)
 
     def fireballGenerator(self,player,fireball_group,window) :
                 
-                if player.score %9 == 0 and player.score %10 != 0 and player.score > 75 :
+                if player.score %9 == 0 and player.score %10 != 0 and player.score > 21 :
                     self.canSpawnFireball = True
 
-                if player.score % 10 == 0 and self.canSpawnFireball and player.score > 75 :
+                if player.score % 10 == 0 and self.canSpawnFireball and player.score > 21 :
                     f_x = random.randint(max (player.x - 200 , 30) , min( 600 , player.x + 200))
                     fireball = fireballClass(f_x,-100,10)
                     fireball_group.add(fireball)
@@ -93,7 +100,14 @@ class Game:
         player = Player(window.get_width()/2, 680 - PLAYER_HEIGHT , PLAYER_WIDTH, PLAYER_HEIGHT, 8)
 
         ############ Images and fonts ############
+
+
         backGroundImage = pygame.image.load("./assets/background2.png").convert_alpha()
+        background_images = {
+        "low": pygame.image.load("./assets/background2.png").convert_alpha(),
+        "medium": pygame.image.load("./assets/background3.png").convert_alpha(),
+        "high": pygame.image.load("./assets/background4.png").convert_alpha()
+    }
         menuBackgroundImage = pygame.image.load("./assets/tower2.png").convert_alpha()
         jumpSound = pygame.mixer.Sound("./assets/jumpSound.mp3")
         jumpSound.set_volume(0.2)
@@ -129,7 +143,8 @@ class Game:
 
         while isPlaying:
 
-            clock.tick(50)
+            clock.tick(60)
+
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
                     isPlaying = False
@@ -154,8 +169,15 @@ class Game:
                 
             elif Game_State == "game" :
 
-                self.platformGenerator(platform_group)
-                self.drawGameWindow(window, backGroundImage)
+                self.platformGenerator(platform_group,player)
+                if player.score < 24:
+                    backGroundImage = background_images["low"]
+                elif player.score >= 24 and player.score <= 60:
+                    backGroundImage = background_images["medium"]
+                else:
+                    backGroundImage = background_images["high"]
+                self.drawGameWindow(window,  backGroundImage )
+
                 platform_group.update(player)
                 player.handlePlatforms(platform_group, window)
 
