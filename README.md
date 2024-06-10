@@ -6,16 +6,16 @@
 
 
 ### Dostarczony został folder ZADANIA, który w poszczególnych plikach zawiera komentarze, co należy wykonać i jakiego zadania to dotyczy
-### Ze względu na całokształ struktury projektu zadania należy wykonywać po kolei
+### Ze względu na całokształt struktury projektu zadania należy wykonywać po kolei
 
 
 # ZADANIE 1
 
 **Wszystkie czynności do zadania 1 wykonuje się w obrębie pliku PeakyClimber.py**
 
-W funckji drawGenerator() umieść kod, który spowoduje ustawienie tła.
-W funckji main() dodaj tytuł do okna gry.
-Należy dodać platformę do grupy sprite'ów w dwóch miejscach pliku(są zaznaczone).
+W funkcji drawGenerator() umieść kod, który spowoduje ustawienie tła.
+W funkcji main() dodaj tytuł do okna gry.
+Należy dodać platformę do grupy sprite'ów w dwóch miejscach pliku (są zaznaczone).
 
 
 ## Po pierwszym zadaniu powinno być ustawione statyczne tło, ustawiony tytuł okna gry i jedna platforma.
@@ -24,7 +24,7 @@ Należy dodać platformę do grupy sprite'ów w dwóch miejscach pliku(są zazna
 
 **Rysowanie gracza:**
 
-W pliku player.py w odpowiedniej funkcji dopsiz funkcjonalność odpowiedzialną za wyświetalnie gracza oraz **aktualizowanie** jego pozycji na ekranie.
+W pliku player.py w odpowiedniej funkcji dopisz funkcjonalność odpowiedzialną za wyświetlanie gracza oraz **aktualizowanie** jego pozycji na ekranie.
 
 **Interakcja z przyciskami:**
 
@@ -44,6 +44,6 @@ W pliku PeakyClimber.py zmodyfikuj funkcję platformGenerator tak aby:
 - Generowała dziesięć platform zamiast jednej
 - Wyświetlane tło było uzależnione od self.score
 
-# Po tym zadaniu powinniśmy otrzymać grywalną wersję, w kótrej dodatkowo zmienia się wygląd platform zależnie od scoru
+# Po tym zadaniu powinniśmy otrzymać grywalną wersję, w której dodatkowo zmienia się wygląd platform zależnie od wyniku
 
 
