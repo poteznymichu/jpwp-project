@@ -2,7 +2,7 @@ import pygame
 import sys
 from player import Player
 from platformClass import Platform
-from button import Button
+from button import Button 
 import random
 from consts import *
 from fireball import fireballClass
@@ -70,12 +70,12 @@ class Game:
             platform_group.add(platform)
 
     def fireballGenerator(self,player,fireball_group,window) :
-                
+                 
                 if player.score %9 == 0 and player.score %10 != 0 and player.score > 21 :
                     self.canSpawnFireball = True
 
                 if player.score % 10 == 0 and self.canSpawnFireball and player.score > 21 :
-                    f_x = random.randint(max (player.x - 200 , 30) , min( 600 , player.x + 200))
+                    f_x = random.randint(int(max(player.x - 200 , 30)) , int(min( 600 , player.x + 200)))
                     fireball = fireballClass(f_x,-100,10)
                     fireball_group.add(fireball)
                     self.canSpawnFireball = False
