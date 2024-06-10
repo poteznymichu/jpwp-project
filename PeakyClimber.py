@@ -9,7 +9,6 @@ from fireball import fireballClass
 import threading
 import ctypes
 
-# setting taskbar icon
 ctypes.windll.shell32.SetCurrentProcessExplicitAppUserModelID("./player/player.png")
 
 

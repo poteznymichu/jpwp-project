@@ -45,7 +45,6 @@ class Player:
             self.player = pygame.image.load("./player/player.png").convert_alpha()
 
 
-        # shifting player's y coordinate to align him with platform
         if self.score > 1 and self.score < 30 :
             self.y += 4
         elif self.score >= 30 and self.score < 60 :

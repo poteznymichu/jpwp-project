@@ -7,7 +7,6 @@ from consts import *
 import threading
 import ctypes
 
-# setting taskbar icon
 ctypes.windll.shell32.SetCurrentProcessExplicitAppUserModelID("./player/player.png")
 
 
@@ -82,9 +81,10 @@ class Game:
         window = pygame.display.set_mode((MAX_WIDTH, MAX_HEIGHT))
         clock = pygame.time.Clock()
         platform_group = pygame.sprite.Group()
-        # initalPlatform = Platform(300, 680, "./assets/platform1.png")
+        # initalPlatform = Platform(300, 680, "ZADANIA/assets/platform1.png")
 
         #Zadanie 1
+        #Grupa spriteów
         '''
 
             #Miejsce na kod

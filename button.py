@@ -16,11 +16,10 @@ class Button :
         mouse_click = pygame.mouse.get_pressed()[0]
 
         if self.rect.collidepoint(mouse_pos) or (self.hovered and not self.rect.collidepoint(mouse_pos)):
-            self.hovered = self.rect.collidepoint(mouse_pos) #przypisze true do hovered jak bedzie w tym prostokacie jak to spelnione self.rect.collidepoint(mouse_pos): da true
+            self.hovered = self.rect.collidepoint(mouse_pos)
         else:
             self.hovered = False
 
-        #tu zeby sprawdzalo tylko jak sie stan zmienil bo tak to sie zmienial naprzemiennie
         if self.hovered != self.last_hovered_state:
             if self.hovered:
                 pygame.mouse.set_cursor(pygame.cursors.arrow)
@@ -29,7 +28,6 @@ class Button :
             self.last_hovered_state = self.hovered
 
         button_action = False
-        #idk czy to dobry approach wywalem zmienna clicked bo i tak raz bedzie klikane, wszedzie zakladalem ze tylko raz sie uzyje menu
         if self.hovered and mouse_click:
             pygame.mouse.set_cursor()
             button_action = True
